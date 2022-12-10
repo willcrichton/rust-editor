@@ -2,6 +2,8 @@ import esbuild from "esbuild";
 import fs from "fs-extra";
 import path from "path";
 
+let watch = process.argv.includes("-w");
+
 /*
 Here's the complicated situation:
 
@@ -24,7 +26,8 @@ esbuild.build({
   format: "iife",
   outdir: "dist",
   bundle: true,
-  minify: true,
+  minify: !watch,
+  watch,
 });
 
 esbuild.build({
@@ -32,7 +35,8 @@ esbuild.build({
   format: "esm",
   outdir: "dist",
   bundle: true,
-  minify: true,
+  minify: !watch,
+  watch,
 });
 
 // wasm-bindgen-rayon has some random hash appended to it, so we have to search
@@ -45,7 +49,8 @@ esbuild.build({
   format: "esm",
   outdir: "dist",
   bundle: true,
-  minify: true,
+  minify: !watch,
+  watch,
 });
 
 fs.copyFileSync("src/ra-wasm/wasm_demo_bg.wasm", "dist/wasm_demo_bg.wasm");

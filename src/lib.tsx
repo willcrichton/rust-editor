@@ -59,9 +59,11 @@ import fake_core from "./fake_core.rs?raw";
 import fake_std from "./fake_std.rs?raw";
 import { conf, grammar } from "./rust-grammar";
 
-let globalSetup = () => {
+let workerPathRoot;
+export let raSetup = (root: string) => {
+  workerPathRoot = root;
   self.MonacoEnvironment = {
-    getWorkerUrl: () => "./editor.worker.js",
+    getWorkerUrl: () => `${workerPathRoot}/editor.worker.js`,
   };
 
   monaco.languages.register({
@@ -72,8 +74,6 @@ let globalSetup = () => {
     monaco.languages.setMonarchTokensProvider("rust", grammar);
   });
 };
-
-globalSetup();
 
 let numRaInsts = 0;
 
@@ -114,9 +114,12 @@ export class RustAnalyzer {
   }
 
   private static async createRA(): Promise<WorkerProxy> {
-    const worker = new Worker(new URL("./ra-worker.js", import.meta.url), {
-      type: "module",
-    });
+    const worker = new Worker(
+      new URL(`${workerPathRoot}/ra-worker.js`, window.location),
+      {
+        type: "module",
+      }
+    );
     const pendingResolve = {};
 
     let id = 1;
