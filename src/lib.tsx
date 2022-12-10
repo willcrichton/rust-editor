@@ -59,7 +59,6 @@ import fake_core from "./fake_core.rs?raw";
 import fake_std from "./fake_std.rs?raw";
 import { conf, grammar } from "./rust-grammar";
 
-const MODE_ID = "rust-ra";
 let globalSetup = () => {
   self.MonacoEnvironment = {
     getWorkerUrl: () => "./editor.worker.js",
@@ -366,7 +365,8 @@ export let Editor: React.FC<{
         setRa(ra);
       });
       return () => {
-        if (idx === undefined) throw new Error("Unmounted editor before RA was loaded");
+        if (idx === undefined)
+          throw new Error("Unmounted editor before RA was loaded");
         raInstances[idx].inUse = false;
       };
     }

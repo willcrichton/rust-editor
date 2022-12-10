@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "main": "dist/lib.js",
+  "files": ["dist"],
   "dependencies": {
     "monaco-editor": "^0.34.0"
   },

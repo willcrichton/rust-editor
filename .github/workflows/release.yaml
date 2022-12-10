@@ -10,12 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps: 
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - run: npm install -g graco
-      - run: ./setup-wasm.sh
-      - run: graco init && graco build
+      - uses: ./.github/workflows/setup
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
