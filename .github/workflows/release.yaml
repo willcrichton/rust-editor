@@ -14,6 +14,7 @@ jobs:
         with:
           toolchain: stable
       - run: npm install -g graco
+      - run: ./setup-wasm.sh
       - run: graco init && graco build
       - uses: JS-DevTools/npm-publish@v1
         with:
