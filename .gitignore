@@ -6,3 +6,4 @@ rust-analyzer-wasm
 .eslintrc.cjs
 .prettierrc.cjs
 jest.config.cjs
+tsconfig.json
