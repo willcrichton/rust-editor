@@ -337,9 +337,19 @@ export let Editor: React.FC<{
   contents: string;
   disabled?: boolean;
   exactHeight?: boolean;
+  highlights?: [number, number][];
+  editorOptions?: monaco.editor.IStandaloneEditorConstructionOptions;
   onChange?: (contents: string) => void;
   onInit?: (editor: monaco.editor.IStandaloneCodeEditor) => void;
-}> = ({ contents, disabled, exactHeight, onChange, onInit }) => {
+}> = ({
+  contents,
+  disabled,
+  exactHeight,
+  highlights,
+  editorOptions,
+  onChange,
+  onInit,
+}) => {
   let ref = useRef<HTMLDivElement>(null);
   let model = useMemo(() => monaco.editor.createModel(contents, "rust"), []);
   let [editor, setEditor] = useState<
@@ -383,8 +393,23 @@ export let Editor: React.FC<{
       folding: false,
       lineNumbersMinChars: 2,
       fontSize: "14px",
+      ...editorOptions,
     });
     setEditor(editor);
+
+    if (highlights) {
+      editor.createDecorationsCollection(
+        highlights.map(([start, end]) => ({
+          range: monaco.Range.fromPositions(
+            model.getPositionAt(start),
+            model.getPositionAt(end)
+          ),
+          options: {
+            inlineClassName: "highlight",
+          },
+        }))
+      );
+    }
 
     let lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
     let lineCount = model.getLineCount();
