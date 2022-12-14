@@ -326,6 +326,10 @@ export class RustAnalyzer {
 }
 
 let raInstances: { ra: RustAnalyzer; inUse: boolean }[] = [];
+let summarizeInsts = () => {
+  let numAvailable = raInstances.filter(({inUse}) => !inUse).length;
+  return `Total instances: ${raInstances.length}, available instances: ${numAvailable}`;
+}
 
 export let preloadRaInstances = (n: number): Promise<void> =>
   Promise.all(
@@ -362,21 +366,18 @@ export let Editor: React.FC<{
   useEffect(() => {
     let inst = raInstances.find(r => !r.inUse);
     if (inst) {
-      console.debug("Found existing RA instance");
       inst.inUse = true;
+      console.debug(`Found existing RA instance. ${summarizeInsts()}`);
       setRa(inst.ra);
       return () => {
+        console.debug(`Released RA instance. ${summarizeInsts()}`);
         inst.inUse = false;
       };
     } else {
-      console.debug(
-        "Creating new RA instance, new total: ",
-        raInstances.length + 1
-      );
       let idx;
-      RustAnalyzer.load().then(ra => {
-        idx = raInstances.length;
-        raInstances.push({ ra, inUse: true });
+      RustAnalyzer.load().then(ra => {        
+        idx = raInstances.push({ ra, inUse: true }) - 1;
+        console.debug(`Creating new RA instance. ${summarizeInsts()}`)      
         setRa(ra);
       });
       return () => {
@@ -385,9 +386,11 @@ export let Editor: React.FC<{
           let intvl = setInterval(() => {
             if (idx === undefined) return;
             raInstances[idx].inUse = false;
+            console.debug(`Released RA instance. ${summarizeInsts()}`);
             clearInterval(intvl);
           }, 33);
         } else {
+          console.debug(`Released RA instance. ${summarizeInsts()}`);
           raInstances[idx].inUse = false;
         }
       };
