@@ -59,6 +59,8 @@ import fake_core from "./fake_core.rs?raw";
 import fake_std from "./fake_std.rs?raw";
 import { conf, grammar } from "./rust-grammar";
 
+export type * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+
 let workerPathRoot;
 export let raSetup = (root: string) => {
   workerPathRoot = root;
@@ -360,14 +362,14 @@ export let Editor: React.FC<{
   useEffect(() => {
     let inst = raInstances.find(r => !r.inUse);
     if (inst) {
-      console.log("Found existing RA instance");
+      console.debug("Found existing RA instance");
       inst.inUse = true;
       setRa(inst.ra);
       return () => {
         inst.inUse = false;
       };
     } else {
-      console.log(
+      console.debug(
         "Creating new RA instance, new total: ",
         raInstances.length + 1
       );
@@ -378,9 +380,16 @@ export let Editor: React.FC<{
         setRa(ra);
       });
       return () => {
-        if (idx === undefined)
-          throw new Error("Unmounted editor before RA was loaded");
-        raInstances[idx].inUse = false;
+        if (idx === undefined) {
+          console.warn("Unmounted editor before RA was loaded");
+          let intvl = setInterval(() => {
+            if (idx === undefined) return;
+            raInstances[idx].inUse = false;
+            clearInterval(intvl);
+          }, 33);
+        } else {
+          raInstances[idx].inUse = false;
+        }
       };
     }
   }, []);
