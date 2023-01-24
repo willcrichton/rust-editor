@@ -35,7 +35,6 @@ esbuild.build({
   format: "esm",
   outdir: "dist",
   bundle: true,
-  minify: !watch,
   watch,
 });
 
@@ -49,8 +48,14 @@ esbuild.build({
   format: "esm",
   outdir: "dist",
   bundle: true,
-  minify: !watch,
   watch,
+});
+
+esbuild.build({
+  entryPoints: ["src/build-utils.ts"],
+  format: "cjs",
+  outdir: "dist",  
+  outExtension: {".js": ".cjs"}
 });
 
 fs.copyFileSync("src/ra-wasm/wasm_demo_bg.wasm", "dist/wasm_demo_bg.wasm");

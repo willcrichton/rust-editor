@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/node': ^18.11.18
   '@types/react': ^18.0.26
   esbuild: ^0.16.5
   fs-extra: ^11.1.0
@@ -10,6 +11,7 @@ dependencies:
   monaco-editor: 0.34.1
 
 devDependencies:
+  '@types/node': 18.11.18
   '@types/react': 18.0.26
   esbuild: 0.16.5
   fs-extra: 11.1.0
@@ -213,6 +215,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@types/node/18.11.18:
+    resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
+    dev: true
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
