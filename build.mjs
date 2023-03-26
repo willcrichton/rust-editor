@@ -21,41 +21,70 @@ is for downstream bundlers (e.g. Vite) to find the `new URL` calls and copy in t
 relevant assets.
 */
 
-esbuild.build({
-  entryPoints: ["node_modules/monaco-editor/esm/vs/editor/editor.worker.js"],
-  format: "iife",
-  outdir: "dist",
-  bundle: true,
-  minify: !watch,
-  watch,
-});
+async function main() {
+  let c0 = await esbuild.context({
+    entryPoints: ["src/lib.tsx"],
+    format: "esm",
+    outdir: "dist",
+    external: [
+      "react",
+      "./fake_alloc.rs?raw",
+      "./fake_core.rs?raw",
+      "./fake_std.rs?raw",
+    ],
+    loader: {
+      ".ttf": "file",
+    },
+    bundle: true,
+  });
 
-esbuild.build({
-  entryPoints: ["src/ra-worker.js"],
-  format: "esm",
-  outdir: "dist",
-  bundle: true,
-  watch,
-});
+  let c1 = await esbuild.context({
+    entryPoints: ["node_modules/monaco-editor/esm/vs/editor/editor.worker.js"],
+    format: "iife",
+    outdir: "dist",
+    bundle: true,
+  });
 
-// wasm-bindgen-rayon has some random hash appended to it, so we have to search
-const SNIPPETS_DIR = "src/ra-wasm/snippets";
-let base = fs
-  .readdirSync(SNIPPETS_DIR)
-  .find(p => p.startsWith("wasm-bindgen-rayon"));
-esbuild.build({
-  entryPoints: [path.join(SNIPPETS_DIR, base, "src/workerHelpers.js")],
-  format: "esm",
-  outdir: "dist",
-  bundle: true,
-  watch,
-});
+  let c2 = await esbuild.context({
+    entryPoints: ["src/ra-worker.js"],
+    format: "esm",
+    outdir: "dist",
+    bundle: true,
+  });
 
-esbuild.build({
-  entryPoints: ["src/build-utils.ts"],
-  format: "cjs",
-  outdir: "dist",  
-  outExtension: {".js": ".cjs"}
-});
+  // wasm-bindgen-rayon has some random hash appended to it, so we have to search
+  const SNIPPETS_DIR = "src/ra-wasm/snippets";
+  let base = fs
+    .readdirSync(SNIPPETS_DIR)
+    .find(p => p.startsWith("wasm-bindgen-rayon"));
+  let c3 = await esbuild.context({
+    entryPoints: [path.join(SNIPPETS_DIR, base, "src/workerHelpers.js")],
+    format: "esm",
+    outdir: "dist",
+    bundle: true,
+  });
 
-fs.copyFileSync("src/ra-wasm/wasm_demo_bg.wasm", "dist/wasm_demo_bg.wasm");
+  let c4 = await esbuild.context({
+    entryPoints: ["src/build-utils.ts"],
+    format: "cjs",
+    outdir: "dist",
+    outExtension: { ".js": ".cjs" },
+  });
+
+  let files = ["fake_alloc.rs", "fake_core.rs", "fake_std.rs", "ra-wasm/wasm_demo_bg.wasm"];
+  files.forEach(file => fs.copyFileSync(`./src/${file}`, `dist/${path.basename(file)}`));
+
+  let ctxts = [c0, c1, c2, c3, c4];
+
+  await Promise.all(
+    ctxts.map(async c => {
+      if (watch) await c.watch();
+      else {
+        await c.rebuild();
+        await c.dispose();
+      }
+    })
+  );
+}
+
+main();

@@ -1,0 +1,10 @@
+{
+  "name": "rust-editor",
+  "validation": {
+    "invalidLink": true,
+    "notExported": true
+  },
+  "entryPoints": [
+    "src/lib.tsx"
+  ]
+}

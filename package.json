@@ -1,13 +1,24 @@
 {
   "name": "@wcrichto/rust-editor",
-  "version": "0.1.4",
-  "type": "module",
-  "main": "dist/lib.js",
+  "version": "0.1.5",
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "monaco-editor": "^0.34.1"
+  "main": "dist/lib.js",
+  "exports": {
+    ".": {
+      "default": "./dist/lib.js"
+    },
+    "./*": {
+      "default": "./dist/*.js"
+    }
+  },
+  "type": "module",
+  "graco": {
+    "platform": "browser"
+  },
+  "typedoc": {
+    "entryPoint": "./src/lib.tsx"
   },
   "peerDependencies": {
     "react": "^18.2.0"
@@ -15,10 +26,8 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
-    "esbuild": "^0.16.5",
-    "fs-extra": "^11.1.0"
-  },
-  "publishConfig": {
-    "access": "public"
+    "esbuild": "^0.17.14",
+    "fs-extra": "^11.1.0",
+    "monaco-editor": "^0.34.1"
   }
 }

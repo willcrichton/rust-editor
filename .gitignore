@@ -1,8 +1,4 @@
 node_modules
 dist
+docs
 rust-analyzer-wasm
-
-# Managed by Graco
-.eslintrc.cjs
-.prettierrc.cjs
-tsconfig.json
