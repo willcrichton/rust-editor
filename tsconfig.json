@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "allowJs": true,
     "outDir": "dist",
-    "noEmit": true
+    "emitDeclarationOnly": true
   },
   "include": [
     "src"
