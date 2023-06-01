@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+// import OMT from "@surma/rollup-plugin-off-main-thread";
 
 export interface GenerateAssetsOptions {
   outDir: string;
@@ -24,4 +25,14 @@ export let generateAssets = ({ outDir, serverUrl }: GenerateAssetsOptions) => {
     );
     fs.writeFileSync(assetPath, contents);
   });
+};
+
+export let rustEditorVitePlugin = ({ serverUrl }: { serverUrl: string }) => {
+  let plugin = {
+    writeBundle(options) {
+      let outDir = options.dir!;
+      generateAssets({ outDir, serverUrl });
+    },
+  };
+  return [plugin, /* OMT() */];
 };

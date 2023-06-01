@@ -9,9 +9,12 @@
     ".": {
       "default": "./dist/lib.js"
     },
+    "./dist/*": {
+      "default": "./dist/*"
+    },
     "./*": {
       "default": "./dist/*.js"
-    }
+    }   
   },
   "type": "module",
   "graco": {

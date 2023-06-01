@@ -22,6 +22,8 @@ relevant assets.
 */
 
 async function main() {
+  fs.mkdirSync("dist", {recursive: true});
+
   let c0 = await esbuild.context({
     entryPoints: ["src/lib.tsx"],
     format: "esm",
@@ -67,7 +69,8 @@ async function main() {
   let c4 = await esbuild.context({
     entryPoints: ["src/build-utils.ts"],
     format: "cjs",
-    outdir: "dist",
+    outdir: "dist",    
+    platform: "node",
     outExtension: { ".js": ".cjs" },
   });
 
