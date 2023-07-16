@@ -18,7 +18,7 @@
     }   
   },
   "type": "module",
-  "graco": {
+  "depot": {
     "platform": "browser"
   },
   "typedoc": {

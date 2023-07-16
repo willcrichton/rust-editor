@@ -10,9 +10,9 @@ runs:
     - name: Build Rust Analyzer
       run: ./setup-wasm.sh
       shell: bash
-    - name: Install Graco
-      run: npm install -g graco
+    - name: Install Depot
+      run: curl https://raw.githubusercontent.com/cognitive-engineering-lab/depot/main/scripts/install.sh | sh
       shell: bash
     - name: Build frontend
-      run: graco init && graco build
+      run: depot build
       shell: bash
