@@ -6,12 +6,12 @@ runs:
       with:
         toolchain: stable
         profile: minimal
+    - name: Install Depot
+      run: curl https://raw.githubusercontent.com/cognitive-engineering-lab/depot/main/scripts/install.sh | sh
+      shell: bash
     - uses: jetli/wasm-pack-action@v0.4.0
     - name: Build Rust Analyzer
       run: ./setup-wasm.sh
-      shell: bash
-    - name: Install Depot
-      run: curl https://raw.githubusercontent.com/cognitive-engineering-lab/depot/main/scripts/install.sh | sh
       shell: bash
     - name: Build frontend
       run: depot build
