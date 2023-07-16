@@ -1,6 +1,6 @@
 {
   "name": "@wcrichto/rust-editor",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "files": [
     "dist"
   ],
@@ -9,6 +9,7 @@
     ".": {
       "default": "./dist/lib.js"
     },
+    "./build-utils": "./dist/build-utils.cjs",
     "./dist/*": {
       "default": "./dist/*"
     },
