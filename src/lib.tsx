@@ -375,9 +375,9 @@ export let Editor: React.FC<{
       };
     } else {
       let idx;
-      RustAnalyzer.load().then(ra => {        
+      RustAnalyzer.load().then(ra => {
         idx = raInstances.push({ ra, inUse: true }) - 1;
-        console.debug(`Creating new RA instance. ${summarizeInsts()}`)      
+        console.debug(`Creating new RA instance. ${summarizeInsts()}`)
         setRa(ra);
       });
       return () => {
@@ -448,6 +448,12 @@ export let Editor: React.FC<{
       });
       disposers.push(dispose.dispose);
     }
+
+    disposers.push(() => {
+      editor.dispose();
+      model.dispose();
+    });
+
 
     onInit && onInit(editor);
 
